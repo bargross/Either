@@ -6,48 +6,47 @@ namespace Either
 {
     public class Either<L, R> : IRule<L, R>
     {
-        private RootEither<L, R> root;
+        private RootEither<L, R> _root;
+        private RuleValidator<L, R> _rules;
 
-        private Dictionary<string, Expression<Func<L, R, bool>>> _rules;
+        private bool _initialized;
 
         public Either()
         {
-            _rules = new Dictionary<string, Expression<Func<L, R, bool>>>();
+            _rules = new RuleValidator<L, R>();
         }
 
         public Either(L left)
         {
-            root = left;
+            _root = left;
+            
+            _rules = new RuleValidator<L, R>();
         }
 
         public Either(R right)
         {
-            root = right;
+            _root = right;
+            
+            _rules = new RuleValidator<L, R>();
         }
 
-        public void AddRule(string ruleName, Expression<Func<L, R, bool>> rule)
-        {
-            throw new NotImplementedException();
-        }
+        public void AddRule(string ruleName, Expression<Func<L, bool>> rule) => _rules.AddRule(_rules.Pack<L>(ruleName, rule));
+        public void AddRule(string ruleName, Expression<Func<R, bool>> rule) => _rules.AddRule(_rules.Pack<R>(ruleName, rule));
 
-        public void AddRule(string ruleName, Expression<Func<L, bool>> rule)
-        {
-            throw new NotImplementedException();
-        }
+        public bool IsLeftValid() => _rules.ValidateRuleFor(_root.Left);
+        public bool IsRightValid() => _rules.ValidateRuleFor(_root.Right);
 
-        public void AddRule(string ruleName, Expression<Func<R, bool>> rule)
-        {
-            throw new NotImplementedException();
-        }
+        // public L GetLeft()
+        // {
+        //     if(IsLeftValid())
+        //     {
+        //         return Left
+        //     }
+        // }
 
-        public void AddRules(string ruleName, Expression<Func<L, R, bool>>[] rules)
-        {
-            throw new NotImplementedException();
-        }
+        // public R GetRight()
+        // {
 
-        private void ValidateRules()
-        {
-            throw new NotImplementedException();
-        }
+        // }
     }
 }
