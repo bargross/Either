@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Either
@@ -11,6 +10,9 @@ namespace Either
 
         private bool _initialized;
 
+        private Type _currentType;
+        private bool _isLeft;
+
         public Either()
         {
             _rules = new RuleValidator<L, R>();
@@ -21,6 +23,10 @@ namespace Either
             _root = left;
             
             _rules = new RuleValidator<L, R>();
+
+            _currentType = typeof(L);
+
+            _isLeft = true;
         }
 
         public Either(R right)
@@ -28,6 +34,10 @@ namespace Either
             _root = right;
             
             _rules = new RuleValidator<L, R>();
+
+            _currentType = typeof(R);
+
+            _isLeft = false;
         }
 
         public void AddRule(string ruleName, Expression<Func<L, bool>> rule) => _rules.AddRule(_rules.Pack<L>(ruleName, rule));
@@ -36,17 +46,32 @@ namespace Either
         public bool IsLeftValid() => _rules.ValidateRuleFor(_root.Left);
         public bool IsRightValid() => _rules.ValidateRuleFor(_root.Right);
 
-        // public L GetLeft()
-        // {
-        //     if(IsLeftValid())
-        //     {
-        //         return Left
-        //     }
-        // }
+        public T GetValue<T>()
+        {
+            var type = typeof(T);
+            
+            if(_currentType == type)
+            {
+                if(_isLeft) {
+                    if(!IsRightValid())
+                    {
+                        throw new FailedRuleValidationException();
+                    }
+                    
+                    return (T)Convert.ChangeType(_root.Left, type);
+                } 
+                else 
+                {
+                    if(!IsRightValid())
+                    {
+                        throw new FailedRuleValidationException();
+                    }
 
-        // public R GetRight()
-        // {
+                    return (T)Convert.ChangeType(_root.Right, type); 
+                }
+            }
 
-        // }
+            throw new InvalidCastException($"Either {typeof(L)} nor {typeof(R)} match type: {typeof(T)}");
+        }
     }
 }
