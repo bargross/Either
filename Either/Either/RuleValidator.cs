@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Collections.Generic;
 
@@ -7,11 +8,21 @@ namespace Either
     public class RuleValidator<L, R> : IRuleValidator<L, R>
     {
         
+        private IDictionary<string, Func<L, bool>> _rulesForLeft;
+        private IDictionary<string, Func<R, bool>> _rulesForRight;
+        private Tuple<IList<string>, IList<string>> _validationMessages;
         private bool _initialized;
-        
-        private Dictionary<string, Func<L, bool>> _rulesForLeft;
-        private Dictionary<string, Func<R, bool>> _rulesForRight;
 
+        public IList<string> FailedRuleMessages 
+        { 
+            get
+            {
+                return IsLeftValue ? _validationMessages.Item1 : _validationMessages.Item2;
+            } 
+        }
+
+        public bool TerminateOnFail { get; set; }
+        public bool IsLeftValue { get; set; }
 
         private void Init()
         {
@@ -19,6 +30,14 @@ namespace Either
             {
                 _rulesForLeft = new Dictionary<string, Func<L, bool>>();
                 _rulesForRight = new Dictionary<string, Func<R, bool>>();
+                
+                if(IsLeftValue)
+                {
+                    _validationMessages = Tuple.Create(new List<string>(15) as IList<string>, new List<string>(0) as IList<string>);
+                } 
+                else {
+                    _validationMessages = Tuple.Create(new List<string>(0) as IList<string>, new List<string>(15) as IList<string>);
+                }
 
                 _initialized = true;
             }
@@ -77,10 +96,21 @@ namespace Either
             {
                 var rule = _rulesForRight[ruleName];
                 
+                if(!TerminateOnFail && !rule(value))
+                {
+                    _validationMessages.Item1.Add($"Rule {ruleName} failed validation");
+                    continue;
+                }
+
                 if(!rule(value))
                 {
                     return false;
                 }
+            }
+
+            if(_validationMessages.Item1.Count > 0)
+            {
+                return false;
             }
 
             return true;
@@ -102,14 +132,25 @@ namespace Either
             {
                 var rule = _rulesForLeft[ruleName];
                 
+                if(!TerminateOnFail && !rule(value))
+                {
+                    _validationMessages.Item2.Add($"Rule {ruleName} failed validation");
+                    continue;
+                }
+
                 if(!rule(value))
                 {
                     return false;
                 }
             }
 
+            if(_validationMessages.Item2.Count > 0)
+            {
+                return false;
+            }
+
             return true;
-        }
+        } 
 
         public Rule<T> Pack<T>(string ruleName, Expression<Func<T, bool>> rule)
         {

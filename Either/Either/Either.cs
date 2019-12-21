@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace Either
 {
-    public class Either<L, R> : IRule<L, R>
+    public class Either<L, R> : IEither<L, R>
     {
         private RootEither<L, R> _root;
         private RuleValidator<L, R> _rules;
@@ -55,7 +55,7 @@ namespace Either
                 if(_isLeft) {
                     if(!IsRightValid())
                     {
-                        throw new FailedRuleValidationException();
+                        throw new RuleFailedException(_rules.FailedRuleMessages.ToString());
                     }
                     
                     return (T)Convert.ChangeType(_root.Left, type);
@@ -64,7 +64,7 @@ namespace Either
                 {
                     if(!IsRightValid())
                     {
-                        throw new FailedRuleValidationException();
+                        throw new RuleFailedException(_rules.FailedRuleMessages.ToString());
                     }
 
                     return (T)Convert.ChangeType(_root.Right, type); 

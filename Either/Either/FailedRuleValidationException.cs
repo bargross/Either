@@ -2,18 +2,18 @@ using System;
 
 namespace Either
 {
-    internal class FailedRuleValidationException : Exception
+    internal class RuleFailedException : Exception
     {
-        public FailedRuleValidationException()
+        public RuleFailedException()
         {
         }
 
-        public FailedRuleValidationException(string message)
+        public RuleFailedException(string message)
             : base(message)
         {
         }
 
-        public FailedRuleValidationException(string message, Exception inner)
+        public RuleFailedException(string message, Exception inner)
             : base(message, inner)
         {
         }
