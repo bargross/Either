@@ -52,10 +52,11 @@ namespace Either
             
             if(_currentType == type)
             {
-                if(_isLeft) {
+                if(_isLeft) 
+                {
                     if(!IsRightValid())
                     {
-                        throw new RuleFailedException(_rules.FailedRuleMessages.ToString());
+                        throw new RuleFailedException(_rules.FailedValidationMessages.ToString());
                     }
                     
                     return (T)Convert.ChangeType(_root.Left, type);
@@ -64,7 +65,7 @@ namespace Either
                 {
                     if(!IsRightValid())
                     {
-                        throw new RuleFailedException(_rules.FailedRuleMessages.ToString());
+                        throw new RuleFailedException(_rules.FailedValidationMessages.ToString());
                     }
 
                     return (T)Convert.ChangeType(_root.Right, type); 

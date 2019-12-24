@@ -10,17 +10,9 @@ namespace Either
         
         private IDictionary<string, Func<L, bool>> _rulesForLeft;
         private IDictionary<string, Func<R, bool>> _rulesForRight;
-        private Tuple<IList<string>, IList<string>> _validationMessages;
         private bool _initialized;
 
-        public IList<string> FailedRuleMessages 
-        { 
-            get
-            {
-                return IsLeftValue ? _validationMessages.Item1 : _validationMessages.Item2;
-            } 
-        }
-
+        public IList<string> FailedValidationMessages { get; private set; }
         public bool TerminateOnFail { get; set; }
         public bool IsLeftValue { get; set; }
 
@@ -30,14 +22,7 @@ namespace Either
             {
                 _rulesForLeft = new Dictionary<string, Func<L, bool>>();
                 _rulesForRight = new Dictionary<string, Func<R, bool>>();
-                
-                if(IsLeftValue)
-                {
-                    _validationMessages = Tuple.Create(new List<string>(15) as IList<string>, new List<string>(0) as IList<string>);
-                } 
-                else {
-                    _validationMessages = Tuple.Create(new List<string>(0) as IList<string>, new List<string>(15) as IList<string>);
-                }
+                FailedValidationMessages = new List<string>(15) as IList<string>;
 
                 _initialized = true;
             }
@@ -98,7 +83,7 @@ namespace Either
                 
                 if(!TerminateOnFail && !rule(value))
                 {
-                    _validationMessages.Item1.Add($"Rule {ruleName} failed validation");
+                    FailedValidationMessages.Add($"Rule {ruleName} failed validation");
                     continue;
                 }
 
@@ -108,7 +93,7 @@ namespace Either
                 }
             }
 
-            if(_validationMessages.Item1.Count > 0)
+            if(!TerminateOnFail && FailedValidationMessages.Count > 0)
             {
                 return false;
             }
@@ -134,7 +119,7 @@ namespace Either
                 
                 if(!TerminateOnFail && !rule(value))
                 {
-                    _validationMessages.Item2.Add($"Rule {ruleName} failed validation");
+                    FailedValidationMessages.Add($"Rule {ruleName} failed validation");
                     continue;
                 }
 
@@ -144,7 +129,7 @@ namespace Either
                 }
             }
 
-            if(_validationMessages.Item2.Count > 0)
+            if(!TerminateOnFail && FailedValidationMessages.Count > 0)
             {
                 return false;
             }
