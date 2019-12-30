@@ -1,7 +1,7 @@
 using System;
 using System.Linq.Expressions;
 
-namespace Either
+namespace Either.Rule
 {
     public interface IRuleValidator<L, R>
     {

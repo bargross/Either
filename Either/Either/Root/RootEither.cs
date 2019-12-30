@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Either
+namespace Either.Root
 {
     public struct RootEither<L, R>
     {

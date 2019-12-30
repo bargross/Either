@@ -1,6 +1,6 @@
 using System;
 
-namespace Either
+namespace Either.Rule
 {
     internal class RuleFailedException : Exception
     {

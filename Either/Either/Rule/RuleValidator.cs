@@ -3,7 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Collections.Generic;
 
-namespace Either
+namespace Either.Rule
 {
     public class RuleValidator<L, R> : IRuleValidator<L, R>
     {
