@@ -135,15 +135,6 @@ namespace Either.Rule
             }
 
             return true;
-        } 
-
-        public Rule<T> Pack<T>(string ruleName, Expression<Func<T, bool>> rule)
-        {
-            return new Rule<T>()
-            {
-                RuleName = ruleName,
-                TypeRule = rule
-            };
         }
     }
 }

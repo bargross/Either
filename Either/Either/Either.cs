@@ -3,6 +3,8 @@ using System.Linq.Expressions;
 
 using Either.Root;
 using Either.Rule;
+using Either.Extensions;
+using Either.Exceptions;
 
 namespace Either
 {
@@ -47,7 +49,7 @@ namespace Either
         }
 
         public void AddRule(string ruleName, Expression<Func<L, bool>> rule) {
-            Rule<L> packedRule = _rules.Pack<L>(ruleName, rule);
+            Rule<L> packedRule = RuleValidationExtension.Pack<L>(ruleName, rule);
             
             if(packedRule != null)
             {
@@ -56,7 +58,7 @@ namespace Either
         } 
         public void AddRule(string ruleName, Expression<Func<R, bool>> rule)
         {
-            Rule<R> packedRule = _rules.Pack<R>(ruleName, rule);
+            Rule<R> packedRule = RuleValidationExtension.Pack<R>(ruleName, rule);
             
             if(packedRule != null)
             {
@@ -77,7 +79,7 @@ namespace Either
                 {
                     if(!IsRightValid())
                     {
-                        throw new RuleFailedException(_rules.FailedValidationMessages.ToString());
+                        throw new RuleValidationException(_rules.FailedValidationMessages.ToString());
                     }
                     
                     return (T)Convert.ChangeType(_root.Left, type);
@@ -86,7 +88,7 @@ namespace Either
                 {
                     if(!IsRightValid())
                     {
-                        throw new RuleFailedException(_rules.FailedValidationMessages.ToString());
+                        throw new RuleValidationException(_rules.FailedValidationMessages.ToString());
                     }
 
                     return (T)Convert.ChangeType(_root.Right, type); 
@@ -95,5 +97,15 @@ namespace Either
 
             throw new InvalidCastException($"Either {typeof(L)} nor {typeof(R)} match type: {typeof(T)}");
         }
+
+        // Assignment & Cast Operators
+
+        public static implicit operator Either<L, R>(R right) => new Either<L, R>(right);
+ 
+        public static implicit operator Either<L, R>(L left) => new Either<L, R>(left);
+
+        public static explicit operator L(Either<L, R> either) => either.GetValue<L>();
+        public static explicit operator R(Either<L, R> either) => either.GetValue<R>();
     }
+
 }
