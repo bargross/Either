@@ -8,19 +8,23 @@
     ".NETCoreApp,Version=v3.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Leonardo.Mengesha\\.nuget\\packages\\": {}
+    "C:\\Users\\wowle\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Leonardo.Mengesha\\source\\repos\\Either\\Either\\Either.csproj",
+      "projectUniqueName": "E:\\Git\\Either\\Either\\Either\\Either.csproj",
       "projectName": "Either",
-      "projectPath": "C:\\Users\\Leonardo.Mengesha\\source\\repos\\Either\\Either\\Either.csproj",
-      "packagesPath": "C:\\Users\\Leonardo.Mengesha\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Leonardo.Mengesha\\source\\repos\\Either\\Either\\obj\\",
+      "projectPath": "E:\\Git\\Either\\Either\\Either\\Either.csproj",
+      "packagesPath": "C:\\Users\\wowle\\.nuget\\packages\\",
+      "outputPath": "E:\\Git\\Either\\Either\\Either\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Leonardo.Mengesha\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\wowle\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -28,8 +32,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {},
-        "https://registry.paymentsense.tech/repository/nuget-hosted/": {}
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp3.0": {
