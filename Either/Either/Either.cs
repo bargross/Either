@@ -95,6 +95,15 @@ namespace Either
             throw new InvalidCastException($"Either {typeof(TLeft)} nor {typeof(TRight)} match type: {typeof(T)}");
         }
 
+        public void ResetRulesForLeft() => _rules.ResetRulesForLeft();
+        public void ResetRulesForRight() => _rules.ResetRulesForRight();
+
+        public void ResetRules()
+        {
+            ResetRulesForLeft();
+            ResetRulesForRight();
+        }
+
         // Assignment & Cast Operators
 
         public static implicit operator Either<TLeft, TRight>(TRight right) => new Either<TLeft, TRight>(right, _rules);

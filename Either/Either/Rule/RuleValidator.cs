@@ -138,5 +138,8 @@ namespace Either.Rule
 
             return true;
         }
+
+        public void ResetRulesForLeft() => _rulesForLeft.Clear();
+        public void ResetRulesForRight() => _rulesForRight.Clear();
     }
 }

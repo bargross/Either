@@ -10,5 +10,7 @@ namespace Either.Rule
         void AddRule(Rule<L> rule);
         bool ValidateRuleFor(L left);
         bool ValidateRuleFor(R right);
+        void ResetRulesForLeft();
+        void ResetRulesForRight();
     }
 }

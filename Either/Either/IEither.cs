@@ -10,5 +10,8 @@ namespace Either
         bool IsRightValid();
         void AddRule(string ruleName, Expression<Func<TLeft, bool>> rule);
         void AddRule(string ruleName, Expression<Func<TRight, bool>> rule);
+        void ResetRulesForLeft();
+        void ResetRulesForRight();
+        void ResetRules();
     }
 }
