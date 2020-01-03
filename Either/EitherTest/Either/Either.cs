@@ -21,7 +21,7 @@ namespace EitherTest
         {
             _either = new Either<string, int>();
 
-            Assert.IsTrue(_either.VaidatorInstantiated);
+            Assert.IsTrue(_either.ValidatorInstantiated);
         }
     }
 }

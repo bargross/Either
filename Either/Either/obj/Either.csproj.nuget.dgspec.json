@@ -1,23 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Git\\Either\\Either\\Either\\Either.csproj": {}
+    "C:\\Users\\Leonardo.Mengesha\\Documents\\Git\\private\\Either\\Either\\Either\\Either.csproj": {}
   },
   "projects": {
-    "E:\\Git\\Either\\Either\\Either\\Either.csproj": {
+    "C:\\Users\\Leonardo.Mengesha\\Documents\\Git\\private\\Either\\Either\\Either\\Either.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Git\\Either\\Either\\Either\\Either.csproj",
+        "projectUniqueName": "C:\\Users\\Leonardo.Mengesha\\Documents\\Git\\private\\Either\\Either\\Either\\Either.csproj",
         "projectName": "Either",
-        "projectPath": "E:\\Git\\Either\\Either\\Either\\Either.csproj",
-        "packagesPath": "C:\\Users\\wowle\\.nuget\\packages\\",
-        "outputPath": "E:\\Git\\Either\\Either\\Either\\obj\\",
+        "projectPath": "C:\\Users\\Leonardo.Mengesha\\Documents\\Git\\private\\Either\\Either\\Either\\Either.csproj",
+        "packagesPath": "C:\\Users\\Leonardo.Mengesha\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Leonardo.Mengesha\\Documents\\Git\\private\\Either\\Either\\Either\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\wowle\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Leonardo.Mengesha\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -25,7 +22,8 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://registry.paymentsense.tech/repository/nuget-hosted/": {}
         },
         "frameworks": {
           "netcoreapp3.0": {

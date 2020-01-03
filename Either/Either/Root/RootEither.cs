@@ -2,15 +2,15 @@
 
 namespace Either.Root
 {
-    public struct RootEither<L, R>
+    public struct RootEither<TLeft, TRight>
     {
         public bool IsLeftPresent { get; }
         public bool IsRightPresent { get; }
 
-        private readonly L _left;
-        private readonly R _right;
+        private readonly TLeft _left;
+        private readonly TRight _right;
 
-        public L Left
+        public TLeft Left
         {
             get
             {
@@ -23,7 +23,7 @@ namespace Either.Root
             }
         }
 
-        public R Right
+        public TRight Right
         {
             get
             {
@@ -36,10 +36,10 @@ namespace Either.Root
             }
         }
 
-        public Type LeftType => typeof(L);
-        public Type RightType => typeof(R);
+        public Type LeftType => typeof(TLeft);
+        public Type RightType => typeof(TRight);
 
-        public RootEither(L left)
+        public RootEither(TLeft left)
         {
             this._left = left;
             _right = default;
@@ -48,7 +48,7 @@ namespace Either.Root
             IsRightPresent = false;
         }
 
-        public RootEither(R right)
+        public RootEither(TRight right)
         {
             this._right = right;
             _left = default;
@@ -57,36 +57,17 @@ namespace Either.Root
             IsRightPresent = true;
         }
 
-        public RootEither<L, R> Of(L left)
-        {
-            return new RootEither<L, R>(left);
-        }
-
-        public RootEither<L, R> Of(R right)
-        {
-            return new RootEither<L, R>(right);
-        }
+        public RootEither<TLeft, TRight> Of(TLeft left) => new RootEither<TLeft, TRight>(left);
+        public RootEither<TLeft, TRight> Of(TRight right) => new RootEither<TLeft, TRight>(right);
+        
 
         // assignment operators
 
-        public static implicit operator RootEither<L, R>(L left)
-        {
-            return new RootEither<L, R>(left);
-        }
+        public static implicit operator RootEither<TLeft, TRight>(TLeft left) => new RootEither<TLeft, TRight>(left);
+        public static implicit operator RootEither<TLeft, TRight>(TRight right) => new RootEither<TLeft, TRight>(right);
 
-        public static implicit operator RootEither<L, R>(R right)
-        {
-            return new RootEither<L, R>(right);
-        }
 
-        public static explicit operator L(RootEither<L, R> value)
-        {
-            return value.Left;
-        }
-
-        public static explicit operator R(RootEither<L, R> value)
-        {
-            return value.Right;
-        }
+        public static explicit operator TLeft(RootEither<TLeft, TRight> value) => value.Left;
+        public static explicit operator TRight(RootEither<TLeft, TRight> value) => value.Right;
     }
 }

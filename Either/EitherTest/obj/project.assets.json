@@ -1580,7 +1580,7 @@
       ]
     },
     "Microsoft.NETCore.Platforms/1.1.0": {
-      "sha512": "bLpT1f/SFlO1CzqXG12KnJzpZs6lv24uX2Rzi4Fmm0noJpNlnWRVryuO3yK18Ca04t/YHcO1e1Z0WDfjseqNzw==",
+      "sha512": "kz0PEW2lhqygehI/d6XsPCQzD7ff7gUJaVGPVETX611eadGsA3A877GdSlU0LRVMCTH/+P3o2iDTak+S08V2+A==",
       "type": "package",
       "path": "microsoft.netcore.platforms/1.1.0",
       "files": [
@@ -5220,23 +5220,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\wowle\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\Leonardo.Mengesha\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Git\\Either\\Either\\EitherTest\\EitherTest.csproj",
+      "projectUniqueName": "C:\\Users\\Leonardo.Mengesha\\Documents\\Git\\private\\Either\\Either\\EitherTest\\EitherTest.csproj",
       "projectName": "EitherTest",
-      "projectPath": "E:\\Git\\Either\\Either\\EitherTest\\EitherTest.csproj",
-      "packagesPath": "C:\\Users\\wowle\\.nuget\\packages\\",
-      "outputPath": "E:\\Git\\Either\\Either\\EitherTest\\obj\\",
+      "projectPath": "C:\\Users\\Leonardo.Mengesha\\Documents\\Git\\private\\Either\\Either\\EitherTest\\EitherTest.csproj",
+      "packagesPath": "C:\\Users\\Leonardo.Mengesha\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Leonardo.Mengesha\\Documents\\Git\\private\\Either\\Either\\EitherTest\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\wowle\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Leonardo.Mengesha\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5244,13 +5240,14 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {},
+        "https://registry.paymentsense.tech/repository/nuget-hosted/": {}
       },
       "frameworks": {
         "netcoreapp3.0": {
           "projectReferences": {
-            "E:\\Git\\Either\\Either\\Either\\Either.csproj": {
-              "projectPath": "E:\\Git\\Either\\Either\\Either\\Either.csproj"
+            "C:\\Users\\Leonardo.Mengesha\\Documents\\Git\\private\\Either\\Either\\Either\\Either.csproj": {
+              "projectPath": "C:\\Users\\Leonardo.Mengesha\\Documents\\Git\\private\\Either\\Either\\Either\\Either.csproj"
             }
           }
         }

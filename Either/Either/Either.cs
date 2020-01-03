@@ -8,57 +8,56 @@ using Either.Exceptions;
 
 namespace Either
 {
-    public class Either<L, R> : IEither<L, R>
+    public class Either<TLeft, TRight> : IEither<TLeft, TRight>
     {
-        private RootEither<L, R> _root;
-        private RuleValidator<L, R> _rules;
-        private bool _initialized;
+        private readonly RootEither<TLeft, TRight> _root;
+        private static RuleValidator<TLeft, TRight> _rules;
 
-        private Type _currentType;
-        private bool _isLeft;
+        private readonly Type _currentType;
+        private readonly bool _isLeft;
 
-        public bool VaidatorInstantiated { get; private set; }
+        public bool ValidatorInstantiated { get; private set; }
 
-        public Either(RuleValidator<L, R> validator=null) {
-            _rules = validator != null ? validator : new RuleValidator<L, R>();
-            VaidatorInstantiated = true;
-        } 
+        public Either(RuleValidator<TLeft, TRight> validator=null) {
+            _rules = validator != null ? validator : new RuleValidator<TLeft, TRight>();
+            ValidatorInstantiated = true;
+        }
 
-        public Either(L left, RuleValidator<L, R> validator=null)
+        public Either(TLeft left, RuleValidator<TLeft, TRight> validator=null)
         {
             _root = left;
             
-            _rules = validator != null ? validator : new RuleValidator<L, R>();
-            VaidatorInstantiated = true;
+            _rules = validator != null ? validator : new RuleValidator<TLeft, TRight>();
+            ValidatorInstantiated = true;
 
-            _currentType = typeof(L);
+            _currentType = typeof(TLeft);
 
             _isLeft = true;
         }
 
-        public Either(R right, RuleValidator<L, R> validator=null)
+        public Either(TRight right, RuleValidator<TLeft, TRight> validator=null)
         {
             _root = right;
             
-            _rules = validator != null ? validator : new RuleValidator<L, R>();
-            VaidatorInstantiated = true;
+            _rules = validator != null ? validator : new RuleValidator<TLeft, TRight>();
+            ValidatorInstantiated = true;
 
-            _currentType = typeof(R);
+            _currentType = typeof(TRight);
 
             _isLeft = false;
         }
 
-        public void AddRule(string ruleName, Expression<Func<L, bool>> rule) {
-            Rule<L> packedRule = RuleValidationExtension.Pack<L>(ruleName, rule);
+        public void AddRule(string ruleName, Expression<Func<TLeft, bool>> rule) {
+            Rule<TLeft> packedRule = RuleValidationExtension.Pack(ruleName, rule);
             
             if(packedRule != null)
             {
                 _rules.AddRule(packedRule);
             }
         } 
-        public void AddRule(string ruleName, Expression<Func<R, bool>> rule)
+        public void AddRule(string ruleName, Expression<Func<TRight, bool>> rule)
         {
-            Rule<R> packedRule = RuleValidationExtension.Pack<R>(ruleName, rule);
+            Rule<TRight> packedRule = RuleValidationExtension.Pack(ruleName, rule);
             
             if(packedRule != null)
             {
@@ -77,35 +76,32 @@ namespace Either
             {
                 if(_isLeft) 
                 {
-                    if(!IsRightValid())
+                    if(!IsLeftValid())
                     {
                         throw new RuleValidationException(_rules.FailedValidationMessages.ToString());
                     }
                     
                     return (T)Convert.ChangeType(_root.Left, type);
                 } 
-                else 
+           
+                if(!IsRightValid())
                 {
-                    if(!IsRightValid())
-                    {
-                        throw new RuleValidationException(_rules.FailedValidationMessages.ToString());
-                    }
-
-                    return (T)Convert.ChangeType(_root.Right, type); 
+                    throw new RuleValidationException(_rules.FailedValidationMessages.ToString());
                 }
+
+                return (T)Convert.ChangeType(_root.Right, type);
             }
 
-            throw new InvalidCastException($"Either {typeof(L)} nor {typeof(R)} match type: {typeof(T)}");
+            throw new InvalidCastException($"Either {typeof(TLeft)} nor {typeof(TRight)} match type: {typeof(T)}");
         }
 
         // Assignment & Cast Operators
 
-        public static implicit operator Either<L, R>(R right) => new Either<L, R>(right);
- 
-        public static implicit operator Either<L, R>(L left) => new Either<L, R>(left);
+        public static implicit operator Either<TLeft, TRight>(TRight right) => new Either<TLeft, TRight>(right, _rules);
+        public static implicit operator Either<TLeft, TRight>(TLeft left) => new Either<TLeft, TRight>(left, _rules);
 
-        public static explicit operator L(Either<L, R> either) => either.GetValue<L>();
-        public static explicit operator R(Either<L, R> either) => either.GetValue<R>();
+        public static explicit operator TLeft(Either<TLeft, TRight> either) => either.GetValue<TLeft>();
+        public static explicit operator TRight(Either<TLeft, TRight> either) => either.GetValue<TRight>();
     }
 
 }

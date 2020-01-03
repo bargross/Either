@@ -5,23 +5,25 @@ using System.Collections.Generic;
 
 namespace Either.Rule
 {
-    public class RuleValidator<L, R> : IRuleValidator<L, R>
+    public class RuleValidator<TLeft, TRight> : IRuleValidator<TLeft, TRight>
     {
         
-        private IDictionary<string, Func<L, bool>> _rulesForLeft;
-        private IDictionary<string, Func<R, bool>> _rulesForRight;
+        private IDictionary<string, Func<TLeft, bool>> _rulesForLeft;
+        private IDictionary<string, Func<TRight, bool>> _rulesForRight;
         private bool _initialized;
 
         public IList<string> FailedValidationMessages { get; private set; }
         public bool TerminateOnFail { get; set; }
         public bool IsLeftValue { get; set; }
 
+        public RuleValidator() => Init();
+        
         private void Init()
         {
             if(!_initialized)
             {
-                _rulesForLeft = new Dictionary<string, Func<L, bool>>();
-                _rulesForRight = new Dictionary<string, Func<R, bool>>();
+                _rulesForLeft = new Dictionary<string, Func<TLeft, bool>>();
+                _rulesForRight = new Dictionary<string, Func<TRight, bool>>();
                 FailedValidationMessages = new List<string>(15) as IList<string>;
 
                 _initialized = true;
@@ -29,7 +31,7 @@ namespace Either.Rule
 
         }
 
-        public void AddRule(Rule<L> rule)
+        public void AddRule(Rule<TLeft> rule)
         {
             var ruleName = rule.RuleName;
             var ruleExpression = rule.TypeRule;
@@ -47,7 +49,7 @@ namespace Either.Rule
             _rulesForLeft.Add(ruleName, ruleExpression.Compile());
         }
 
-        public void AddRule(Rule<R> rule)
+        public void AddRule(Rule<TRight> rule)
         {
             var ruleName = rule.RuleName;
             var ruleExpression = rule.TypeRule;
@@ -65,7 +67,7 @@ namespace Either.Rule
             _rulesForRight.Add(ruleName, ruleExpression.Compile());
         }
 
-        public bool ValidateRuleFor(R value)
+        public bool ValidateRuleFor(TRight value)
         {
             if(value == null)
             {
@@ -101,7 +103,7 @@ namespace Either.Rule
             return true;
         }
 
-        public bool ValidateRuleFor(L value)
+        public bool ValidateRuleFor(TLeft value)
         {
             if(value == null)
             {
