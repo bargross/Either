@@ -2,13 +2,14 @@
 
 namespace Either.Root
 {
-    public struct RootEither<TLeft, TRight>
+    public class RootEither<TLeft, TRight> : IDisposable
     {
         public bool IsLeftPresent { get; }
         public bool IsRightPresent { get; }
 
-        private readonly TLeft _left;
-        private readonly TRight _right;
+        private TLeft _left;
+        private TRight _right;
+        private bool _disposed = false;
 
         public TLeft Left
         {
@@ -57,9 +58,10 @@ namespace Either.Root
             IsRightPresent = true;
         }
 
+        ~RootEither() => Dispose(false);
+ 
         public RootEither<TLeft, TRight> Of(TLeft left) => new RootEither<TLeft, TRight>(left);
         public RootEither<TLeft, TRight> Of(TRight right) => new RootEither<TLeft, TRight>(right);
-        
 
         // assignment operators
 
@@ -69,5 +71,29 @@ namespace Either.Root
 
         public static explicit operator TLeft(RootEither<TLeft, TRight> value) => value.Left;
         public static explicit operator TRight(RootEither<TLeft, TRight> value) => value.Right;
+
+        // GC
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if(!_disposed)
+            {
+                if (disposing) 
+                {
+                    // managed resources
+
+                    _left = default(TLeft);
+                    _right =  default(TRight);
+                }
+
+                _disposed = true;
+            }
+        }
     }
 }

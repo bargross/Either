@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq.Expressions;
 
 using Either.Root;
 using Either.Rule;
@@ -8,13 +7,14 @@ using Either.Exceptions;
 
 namespace Either
 {
-    public class Either<TLeft, TRight> : IEither<TLeft, TRight>
+    public class Either<TLeft, TRight> : IEither<TLeft, TRight>, IDisposable
     {
-        private readonly RootEither<TLeft, TRight> _root;
+        private RootEither<TLeft, TRight> _root;
         private static RuleValidator<TLeft, TRight> _rules;
 
         private readonly Type _currentType;
         private readonly bool _isLeft;
+        private bool _disposed = false;
 
         public bool ValidatorInstantiated { get; private set; }
 
@@ -47,7 +47,9 @@ namespace Either
             _isLeft = false;
         }
 
-        public void AddRule(string ruleName, Expression<Func<TLeft, bool>> rule) {
+        ~Either() => Dispose(false);
+
+        public void AddRule(string ruleName, Func<TLeft, bool> rule) {
             Rule<TLeft> packedRule = RuleValidationExtension.Pack(ruleName, rule);
             
             if(packedRule != null)
@@ -55,7 +57,7 @@ namespace Either
                 _rules.AddRule(packedRule);
             }
         } 
-        public void AddRule(string ruleName, Expression<Func<TRight, bool>> rule)
+        public void AddRule(string ruleName, Func<TRight, bool> rule)
         {
             Rule<TRight> packedRule = RuleValidationExtension.Pack(ruleName, rule);
             
@@ -64,6 +66,9 @@ namespace Either
                 _rules.AddRule(packedRule);
             }
         }
+
+        public void ReplaceRule(string ruleName, Func<TLeft, bool> replacement) => _rules.Replace(ruleName, replacement);
+        public void ReplaceRule(string ruleName, Func<TRight, bool> replacement) => _rules.Replace(ruleName, replacement);
 
         public bool IsLeftValid() => _rules.ValidateRuleFor(_root.Left);
         public bool IsRightValid() => _rules.ValidateRuleFor(_root.Right);
@@ -102,6 +107,25 @@ namespace Either
         {
             ResetRulesForLeft();
             ResetRulesForRight();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if(!_disposed)
+            {
+                if (disposing) 
+                {
+                    _rules.Dispose();
+                }
+
+                _disposed = true;
+            }
         }
 
         // Assignment & Cast Operators

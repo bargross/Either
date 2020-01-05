@@ -1,22 +1,22 @@
 using System;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Collections.Generic;
 
 namespace Either.Rule
 {
-    public class RuleValidator<TLeft, TRight> : IRuleValidator<TLeft, TRight>
+    public class RuleValidator<TLeft, TRight> : IRuleValidator<TLeft, TRight>, IDisposable
     {
         
         private IDictionary<string, Func<TLeft, bool>> _rulesForLeft;
         private IDictionary<string, Func<TRight, bool>> _rulesForRight;
         private bool _initialized;
+        private bool _disposed = false;
 
         public IList<string> FailedValidationMessages { get; private set; }
         public bool TerminateOnFail { get; set; }
         public bool IsLeftValue { get; set; }
 
         public RuleValidator() => Init();
+        ~RuleValidator() => Dispose(false);
         
         private void Init()
         {
@@ -46,7 +46,7 @@ namespace Either.Rule
                 throw new NullReferenceException("Rule cannot be null");
             }
 
-            _rulesForLeft.Add(ruleName, ruleExpression.Compile());
+            _rulesForLeft.Add(ruleName, ruleExpression);
         }
 
         public void AddRule(Rule<TRight> rule)
@@ -64,8 +64,11 @@ namespace Either.Rule
                 throw new NullReferenceException("Rule cannot be null");
             }
 
-            _rulesForRight.Add(ruleName, ruleExpression.Compile());
+            _rulesForRight.Add(ruleName, ruleExpression);
         }
+
+        public void Replace(string ruleName, Func<TLeft, bool> replacement) => _rulesForLeft[ruleName] = replacement;
+        public void Replace(string ruleName, Func<TRight, bool> replacement) => _rulesForRight[ruleName] = replacement;
 
         public bool ValidateRuleFor(TRight value)
         {
@@ -141,5 +144,28 @@ namespace Either.Rule
 
         public void ResetRulesForLeft() => _rulesForLeft.Clear();
         public void ResetRulesForRight() => _rulesForRight.Clear();
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if(!_disposed)
+            {
+                if (disposing) 
+                {
+                    // managed resources
+
+                    _rulesForLeft = null;
+                    _rulesForRight = null;
+                    FailedValidationMessages = null;
+                }
+
+                _disposed = true;
+            }
+        }
     }
 }
