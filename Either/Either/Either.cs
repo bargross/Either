@@ -27,7 +27,7 @@ namespace Either
         {
             _root = left;
             
-            _rules = validator != null ? validator : new RuleValidator<TLeft, TRight>();
+            InitializeValidator(_rules, validator);
             ValidatorInstantiated = true;
 
             _currentType = typeof(TLeft);
@@ -39,7 +39,7 @@ namespace Either
         {
             _root = right;
             
-            _rules = validator != null ? validator : new RuleValidator<TLeft, TRight>();
+            InitializeValidator(_rules, validator);
             ValidatorInstantiated = true;
 
             _currentType = typeof(TRight);
@@ -108,6 +108,23 @@ namespace Either
             ResetRulesForLeft();
             ResetRulesForRight();
         }
+
+        private void InitializeValidator(RuleValidator<TLeft, TRight> validatorAtScope, RuleValidator<TLeft, TRight> replacement = null)
+        {
+            bool instantiated = false;
+            if(validatorAtScope == null) 
+            {
+                validatorAtScope = new RuleValidator<TLeft, TRight>();
+                instantiated = true;
+            }
+            
+            if(!instantiated && replacement != null)
+            {
+                validatorAtScope = replacement;
+            }
+        }
+
+        // IDisposable implementation
 
         public void Dispose()
         {
