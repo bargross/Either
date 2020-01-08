@@ -16,7 +16,7 @@ namespace Either
         private readonly bool _isLeft;
         private bool _disposed = false;
 
-        public bool ValidatorInstantiated { get; private set; }
+        public bool ValidatorInstantiated { get; }
 
         public Either(RuleValidator<TLeft, TRight> validator=null) {
             _rules = validator != null ? validator : new RuleValidator<TLeft, TRight>();

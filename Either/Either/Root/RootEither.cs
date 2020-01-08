@@ -2,7 +2,7 @@
 
 namespace Either.Root
 {
-    public class RootEither<TLeft, TRight> : IDisposable
+    public class RootEither<TLeft, TRight> : IRootEither<TLeft, TRight>, IDisposable
     {
         public bool IsLeftPresent { get; }
         public bool IsRightPresent { get; }
@@ -43,16 +43,16 @@ namespace Either.Root
         public RootEither(TLeft left)
         {
             this._left = left;
-            _right = default;
+            _right = default(TRight);
 
             IsLeftPresent = true;
             IsRightPresent = false;
         }
 
-        public RootEither(TRight right)
+        public RootEither(TRight right) 
         {
             this._right = right;
-            _left = default;
+            _left = default(TLeft);
 
             IsLeftPresent = false;
             IsRightPresent = true;
