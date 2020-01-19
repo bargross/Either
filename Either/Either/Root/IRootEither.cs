@@ -1,6 +1,6 @@
 ﻿namespace Either.Root
 {
-    public interface IRootEither<TLeft, TRight>
+    internal interface IRootEither<TLeft, TRight>
     {
         TRight Right { get; }
         TLeft Left { get; }

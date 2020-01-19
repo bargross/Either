@@ -2,7 +2,7 @@ using System;
 
 namespace Either.Exceptions
 {
-    internal class RuleValidationException : Exception
+    public class RuleValidationException : Exception
     {
         public RuleValidationException()
         {

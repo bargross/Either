@@ -25,7 +25,7 @@ namespace EitherTest
         }
 
         [Test]
-        public void EitherConstructor_NoParametersProvided_ValidatorInstantiated()
+        public void EitherConstructor_NoParametersProvided_()
         {
             _either = new Either<string, int>();
 

@@ -1,0 +1,8 @@
+E:\Git\Either\Either\Either\obj\Debug\netcoreapp3.0\Either.csprojAssemblyReference.cache
+E:\Git\Either\Either\Either\obj\Debug\netcoreapp3.0\Either.AssemblyInfoInputs.cache
+E:\Git\Either\Either\Either\obj\Debug\netcoreapp3.0\Either.AssemblyInfo.cs
+E:\Git\Either\Either\Either\bin\Debug\netcoreapp3.0\Either.deps.json
+E:\Git\Either\Either\Either\bin\Debug\netcoreapp3.0\Either.dll
+E:\Git\Either\Either\Either\bin\Debug\netcoreapp3.0\Either.pdb
+E:\Git\Either\Either\Either\obj\Debug\netcoreapp3.0\Either.dll
+E:\Git\Either\Either\Either\obj\Debug\netcoreapp3.0\Either.pdb

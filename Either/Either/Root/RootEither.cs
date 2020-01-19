@@ -2,7 +2,7 @@
 
 namespace Either.Root
 {
-    public class RootEither<TLeft, TRight> : IRootEither<TLeft, TRight>, IDisposable
+    internal class RootEither<TLeft, TRight> : IRootEither<TLeft, TRight>, IDisposable
     {
         public bool IsLeftPresent { get; }
         public bool IsRightPresent { get; }
