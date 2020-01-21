@@ -57,7 +57,7 @@ namespace EitherTests
         }
 
         [TestMethod]
-        public void AddRule_RuleProvidedForLeftWithValueOutsideOfBounds_ThrowsInvalidCastException()
+        public void GetValue_RuleProvidedForLeftWithValueOutsideOfBounds_ThrowsInvalidCastException()
         {
             _either = " ";
 
@@ -65,7 +65,7 @@ namespace EitherTests
         }
 
         [TestMethod]
-        public void AddRule_RuleProvidedForRightWithValueOutsideOfBounds_ThrowsInvalidCastException()
+        public void GetValue_RuleProvidedForRightWithValueOutsideOfBounds_ThrowsInvalidCastException()
         {
             _either = 11;
 
@@ -73,7 +73,7 @@ namespace EitherTests
         }
 
         [TestMethod]
-        public void AddRule_RuleProvidedForLeftWithValueOutsideOfBounds_ThrowsRuleValidationException()
+        public void GetValue_RuleProvidedForLeftWithValueOutsideOfBounds_ThrowsRuleValidationException()
         {
             var expected = " ";
             var ruleName = "A";
@@ -88,7 +88,7 @@ namespace EitherTests
         }
 
         [TestMethod]
-        public void AddRule_RuleProvidedForRightWithValueOutsideOfBounds_ThrowsRuleValidationException()
+        public void GetValue_RuleProvidedForRightWithValueOutsideOfBounds_ThrowsRuleValidationException()
         {
             var expected = 11;
             var ruleName = "A";
