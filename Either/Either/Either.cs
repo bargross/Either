@@ -8,22 +8,22 @@ using Either.Exceptions;
 
 namespace Either
 {
-    public class Either<TLeft, TRight> : IEither<TLeft, TRight>, IDisposable
+    public class Either<TLeft, TRight> : IEither<TLeft, TRight>
     {
         private RootEither<TLeft, TRight> _root;
-        private static RuleValidator<TLeft, TRight> _rules;
+        private static RuleValidator<TLeft, TRight> _ruleValidator;
 
         private readonly Type _currentType;
         private readonly bool _isLeft;
         private bool _disposed = false;
 
-        public Either() => _rules = new RuleValidator<TLeft, TRight>();
+        public Either() => _ruleValidator = new RuleValidator<TLeft, TRight>();
 
         public Either(TLeft left)
         {
             _root = left;
 
-            _rules = new RuleValidator<TLeft, TRight>();
+            _ruleValidator = new RuleValidator<TLeft, TRight>();
 
             _currentType = typeof(TLeft);
 
@@ -34,7 +34,7 @@ namespace Either
         {
             _root = right;
 
-            _rules = new RuleValidator<TLeft, TRight>();
+            _ruleValidator = new RuleValidator<TLeft, TRight>();
 
             _currentType = typeof(TRight);
 
@@ -52,7 +52,7 @@ namespace Either
 
             Rule<TLeft> packedRule = RuleValidationExtension.Pack(ruleName, rule);
 
-            _rules.AddRule(packedRule);
+            _ruleValidator.AddRule(packedRule);
         }
 
         public void AddRule(string ruleName, Func<TRight, bool> rule)
@@ -64,7 +64,7 @@ namespace Either
 
             Rule<TRight> packedRule = RuleValidationExtension.Pack(ruleName, rule);
 
-            _rules.AddRule(packedRule);
+            _ruleValidator.AddRule(packedRule);
         }
 
         public void ReplaceRule(string ruleName, Func<TLeft, bool> replacement)
@@ -74,7 +74,7 @@ namespace Either
                 throw new ArgumentException("Rule name cannot be null or empty");
             }
             
-            _rules.Replace(ruleName, replacement);
+            _ruleValidator.Replace(ruleName, replacement);
         }
 
         public void ReplaceRule(string ruleName, Func<TRight, bool> replacement)
@@ -84,11 +84,11 @@ namespace Either
                 throw new ArgumentException("Rule name cannot be null or empty");
             }
             
-            _rules.Replace(ruleName, replacement);
+            _ruleValidator.Replace(ruleName, replacement);
         }
 
-        public bool IsLeftValid() => _rules.ValidateRuleFor(_root.Left);
-        public bool IsRightValid() => _rules.ValidateRuleFor(_root.Right);
+        public bool IsLeftValid() => _ruleValidator.ValidateRuleFor(_root.Left);
+        public bool IsRightValid() => _ruleValidator.ValidateRuleFor(_root.Right);
 
         public T GetValue<T>()
         {
@@ -100,7 +100,7 @@ namespace Either
                 {
                     if(!IsLeftValid())
                     {
-                        throw new RuleValidationException(string.Join("/r", _rules.FailedValidationMessages));
+                        throw new RuleValidationException(string.Join("/r", _ruleValidator.FailedValidationMessages));
                     }
                     
                     return (T)Convert.ChangeType(_root.Left, type);
@@ -108,7 +108,7 @@ namespace Either
            
                 if(!IsRightValid())
                 {
-                    throw new RuleValidationException(string.Join("/r", _rules.FailedValidationMessages));
+                    throw new RuleValidationException(string.Join("/r", _ruleValidator.FailedValidationMessages));
                 }
 
                 return (T)Convert.ChangeType(_root.Right, type);
@@ -117,14 +117,16 @@ namespace Either
             throw new InvalidCastException($"Either {typeof(TLeft)} nor {typeof(TRight)} match type: {typeof(T)}");
         }
 
-        public void ResetRulesForLeft() => _rules.ResetRulesForLeft();
-        public void ResetRulesForRight() => _rules.ResetRulesForRight();
+        public void ResetRulesForLeft() => _ruleValidator.ResetRulesForLeft();
+        public void ResetRulesForRight() => _ruleValidator.ResetRulesForRight();
 
         public void ResetRules()
         {
             ResetRulesForLeft();
             ResetRulesForRight();
         }
+
+        public void SetValidatorOptions(Action<IRuleValidator<TLeft, TRight>> setOptions) => setOptions.Invoke(_ruleValidator);
 
         // IDisposable implementation
 
@@ -140,21 +142,21 @@ namespace Either
             {
                 if (disposing) 
                 {
-                    _rules.Dispose();
+                    _ruleValidator.Dispose();
                 }
 
                 _disposed = true;
             }
         }
 
-        internal void SetRules(RuleValidator<TLeft, TRight> rules) => _rules = rules;
+        internal void SetRules(RuleValidator<TLeft, TRight> rules) => _ruleValidator = rules;
 
         // Assignment & Cast Operators
 
         public static implicit operator Either<TLeft, TRight>(TRight right)
         {
             var newInstance = new Either<TLeft, TRight>(right);
-            newInstance.SetRules(_rules);
+            newInstance.SetRules(_ruleValidator);
 
             return newInstance;
         }
@@ -162,7 +164,7 @@ namespace Either
         public static implicit operator Either<TLeft, TRight>(TLeft left)
         { 
             var newInstance = new Either<TLeft, TRight>(left);
-            newInstance.SetRules(_rules);
+            newInstance.SetRules(_ruleValidator);
 
             return newInstance;
         }

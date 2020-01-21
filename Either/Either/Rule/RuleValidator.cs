@@ -3,12 +3,13 @@ using System.Collections.Generic;
 
 namespace Either.Rule
 {
-    public class RuleValidator<TLeft, TRight> : IRuleValidator<TLeft, TRight>, IDisposable
+    public class RuleValidator<TLeft, TRight> : IRuleValidator<TLeft, TRight>
     {
         private IDictionary<string, (Func<TLeft, bool>, bool)> _rulesForLeft;
         private IDictionary<string, (Func<TRight, bool>, bool)> _rulesForRight;
         private bool _initialized;
         private bool _disposed = false;
+        private int _capacity = 10;
 
         public IList<string> FailedValidationMessages { get; private set; }
         public bool TerminateOnFail { get; set; }
@@ -23,9 +24,9 @@ namespace Either.Rule
         {
             if(!_initialized)
             {
-                _rulesForLeft = new Dictionary<string, (Func<TLeft, bool>, bool)>();
-                _rulesForRight = new Dictionary<string, (Func<TRight, bool>, bool)>();
-                FailedValidationMessages = new List<string>(15) as IList<string>;
+                _rulesForLeft = new Dictionary<string, (Func<TLeft, bool>, bool)>(_capacity);
+                _rulesForRight = new Dictionary<string, (Func<TRight, bool>, bool)>(_capacity);
+                FailedValidationMessages = new List<string>(_capacity) as IList<string>;
                 TerminateOnFail = false;
 
                 _initialized = true;

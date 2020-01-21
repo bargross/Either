@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace Either.Rule
 {
-    public interface IRuleValidator<TLeft, TRight>
+    public interface IRuleValidator<TLeft, TRight> : IDisposable
     {
         bool TerminateOnFail { get; set; }
         bool IsLeftValue { get; set; }

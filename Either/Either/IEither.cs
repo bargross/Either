@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Linq.Expressions;
+using Either.Rule;
 
 namespace Either
 {
-    public interface IEither<TLeft, TRight>
+    public interface IEither<TLeft, TRight> : IDisposable
     {
         T GetValue<T>();
         bool IsLeftValid();
@@ -13,5 +13,7 @@ namespace Either
         void ResetRulesForLeft();
         void ResetRulesForRight();
         void ResetRules();
+
+        void SetValidatorOptions(Action<IRuleValidator<TLeft, TRight>> validator);
     }
 }
