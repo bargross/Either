@@ -119,18 +119,20 @@ namespace Either.Rule
 
             foreach(var ruleName in ruleContainer.Keys)
             {
+
                 var rule = ruleContainer[ruleName].Item1;
-                if (!TerminateOnFail && !rule(value))
+
+                if (TerminateOnFail && !rule.Invoke(value))
+                {
+                    FailedCount++;
+                    return false;
+                }
+
+                if (!TerminateOnFail && !rule.Invoke(value))
                 {
                     FailedValidationMessages.Add($"Value failed rule {ruleName} on validation");
                     FailedCount++;
                     continue;
-                }
-
-                if(TerminateOnFail && !rule(value))
-                {
-                    FailedCount++;
-                    return false;
                 }
 
                 ruleContainer[ruleName] = (ruleContainer[ruleName].Item1, true);

@@ -57,27 +57,50 @@ namespace EitherTests
         }
 
         [TestMethod]
+        public void AddRule_RuleProvidedForLeftWithValueOutsideOfBounds_ThrowsInvalidCastException()
+        {
+            _either = " ";
+
+            Assert.ThrowsException<InvalidCastException>(() => _either.GetValue<int>());
+        }
+
+        [TestMethod]
+        public void AddRule_RuleProvidedForRightWithValueOutsideOfBounds_ThrowsInvalidCastException()
+        {
+            _either = 11;
+
+            Assert.ThrowsException<InvalidCastException>(() => _either.GetValue<string>());
+        }
+
+        [TestMethod]
         public void AddRule_RuleProvidedForLeftWithValueOutsideOfBounds_ThrowsRuleValidationException()
         {
             var expected = " ";
-
-            _either.AddRule("A", value => !string.IsNullOrWhiteSpace(value));
+            var ruleName = "A";
 
             _either = expected;
+            _either.AddRule(ruleName, value => !string.IsNullOrWhiteSpace(value));
+
+            _either.SetValidatorOptions(options => options.TerminateOnFail = true);
 
             Assert.ThrowsException<RuleValidationException>(() => _either.GetValue<string>());
+            Assert.IsFalse(_either.GetRuleValidationResult(ruleName));
         }
 
         [TestMethod]
         public void AddRule_RuleProvidedForRightWithValueOutsideOfBounds_ThrowsRuleValidationException()
         {
             var expected = 11;
-
-            _either.AddRule("A", value => value > 0 && value < 10);
+            var ruleName = "A";
 
             _either = expected;
 
+            _either.AddRule(ruleName, value => value >= 0 && value <= 10 );
+
+            _either.SetValidatorOptions(options => options.TerminateOnFail = true);
+
             Assert.ThrowsException<RuleValidationException>(() => _either.GetValue<int>());
+            Assert.IsFalse(_either.GetRuleValidationResult(ruleName));
         }
     }
 }

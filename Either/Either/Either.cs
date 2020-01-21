@@ -126,6 +126,8 @@ namespace Either
             ResetRulesForRight();
         }
 
+        public bool GetRuleValidationResult(string ruleName) => _ruleValidator.GetRuleValidationResult(ruleName);
+
         public void SetValidatorOptions(Action<IRuleValidator<TLeft, TRight>> setOptions) => setOptions.Invoke(_ruleValidator);
 
         // IDisposable implementation
