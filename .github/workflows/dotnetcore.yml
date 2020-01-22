@@ -1,0 +1,27 @@
+name: .NET Core
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.0.100
+    - name: build-with-dotnet
+      run: |
+        dotnet build Either/Either.sln --configuration Release
+    - name: unit-tests
+      run: |
+        dotnet test Either/Either.sln --configuration Release
+    - name: package-library
+      run: |
+        dotnet pack Either/Either.sln
+    - name: publish-library
+      run: |
+        dotnet nuget push Either/Either/bin/Debug/ControlFlow_Type_Either.1.0.0.nupkg -k oy2dzacin3ajjbsj7kha446mq57mgbre3ejajvgdep2uau -s https://api.nuget.org/v3/index.json
