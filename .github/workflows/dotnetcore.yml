@@ -21,7 +21,7 @@ jobs:
         dotnet test Either/Either.sln --configuration Release
     - name: package-library
       run: |
-        dotnet pack Either/Either.sln --configuration Release
+        dotnet pack Either/Either.sln
     - name: publish-library
       run: |
-        dotnet nuget push ControlFlow_Type_Either.1.0.0.nupkg.1.0.0.nupkg -k oy2dzacin3ajjbsj7kha446mq57mgbre3ejajvgdep2uau -s https://api.nuget.org/v3/index.json --configuration Release
+        dotnet nuget push ControlFlow_Type_Either.1.0.0.nupkg.1.0.0.nupkg -k oy2dzacin3ajjbsj7kha446mq57mgbre3ejajvgdep2uau -s https://api.nuget.org/v3/index.json
