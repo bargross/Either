@@ -14,10 +14,10 @@ jobs:
       with:
         dotnet-version: 3.0.100
     - name: build-with-dotnet
-      run: cd  ../../Either && dotnet build Either.sln --configuration Release
+      run: dotnet build ../../Either/Either/Either.csproj --configuration Release
     - name: unit-tests
-      run: cd  ../../Either && dotnet test Either.sln --configuration Release
+      run: dotnet test ../../Either/EitherTests/Either.csproj --configuration Release
     - name: package-library
-      run: cd  ../../Either && dotnet pack Either.sln --configuration Release
+      run: dotnet pack ../../Either/Either/Either.csproj --configuration Release
     - name: publish-library
-      run: cd  ../../Either && dotnet nuget push Either.1.0.0.nupkg -k oy2dzacin3ajjbsj7kha446mq57mgbre3ejajvgdep2uau -s https://api.nuget.org/v3/index.json --configuration Release
+      run: dotnet nuget push Either.1.0.0.nupkg -k oy2dzacin3ajjbsj7kha446mq57mgbre3ejajvgdep2uau -s https://api.nuget.org/v3/index.json --configuration Release
