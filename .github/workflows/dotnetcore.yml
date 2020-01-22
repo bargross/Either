@@ -9,42 +9,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 'netcore3.0'
-
-    - name: Unit tests
-      run: cd '../../\Either\\EitherTests\\EitherTests.csproj'
-      run: dotnet test
-      
+    - name: unit-tests
+      run: |
+        cd '../../\Either\\EitherTests\\EitherTests.csproj'
+        dotnet test
     - name: package-&-publish-library
-      run: cd '../../\Either\\Either\\Either.csproj'
-      run: dotnet pack
-      run: dotnet nuget push Either.1.0.0.nupkg -k oy2dzacin3ajjbsj7kha446mq57mgbre3ejajvgdep2uau -s https://api.nuget.org/v3/index.json
-
-    # integration_tests:
-    #   title: Integration tests
-    #   stage: test
-    #   image: mcr.microsoft.com/dotnet/core/sdk:3.0
-    #   working_directory: './tests/IntegrationTests/'
-    #   commands:
-    #     - dotnet test 
-
-    # functional_tests:
-    #   title: Fuctional tests
-    #   stage: test
-    #   image: mcr.microsoft.com/dotnet/core/sdk:3.0
-    #   working_directory:
-    #   commands:
-    #     - dotnet test 
-
-    # deploy_image:
-    #   title: Building Docker Image
-    #   type: build
-    #   stage: build
-    #   image_name: dotnetcore-t-1
-    #   working_directory: 
-    #   tag: latest
-    #   dockerfile: src/Web/Dockerfile      
+      run: |
+        cd '../../\Either\\Either\\Either.csproj'
+        dotnet pack
+        dotnet nuget push Either.1.0.0.nupkg -k oy2dzacin3ajjbsj7kha446mq57mgbre3ejajvgdep2uau -s https://api.nuget.org/v3/index.json
