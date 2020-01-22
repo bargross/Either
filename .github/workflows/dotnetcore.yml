@@ -10,22 +10,14 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1.2.0
+      uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.0.100
     - name: build-with-dotnet
-      run:
-        cd  ../../Either
-        dotnet build Either.sln --configuration Release
+      run: cd  ../../Either && dotnet build Either.sln --configuration Release
     - name: unit-tests
-      run:
-        cd  ../../Either
-        dotnet test Either.sln --configuration Release
+      run: cd  ../../Either && dotnet test Either.sln --configuration Release
     - name: package-library
-      run:
-        cd  ../../Either 
-        dotnet pack Either.sln --configuration Release
+      run: cd  ../../Either && dotnet pack Either.sln --configuration Release
     - name: publish-library
-      run:
-        cd  ../../Either 
-        dotnet nuget push Either.1.0.0.nupkg -k oy2dzacin3ajjbsj7kha446mq57mgbre3ejajvgdep2uau -s https://api.nuget.org/v3/index.json
+      run: cd  ../../Either && dotnet nuget push Either.1.0.0.nupkg -k oy2dzacin3ajjbsj7kha446mq57mgbre3ejajvgdep2uau -s https://api.nuget.org/v3/index.json --configuration Release
