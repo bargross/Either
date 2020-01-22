@@ -17,6 +17,7 @@ jobs:
       run: dotnet build ../../Either/Either/Either.csproj --configuration Release
     - name: unit-tests
       run: dotnet test ../../Either/EitherTests/EitherTests.csproj --configuration Release
-    - name: package-&-publish-library
+    - name: package-library
       run: dotnet pack ../../Either/Either/Either.csproj
+    - name: publish-library
       run: dotnet nuget push Either.1.0.0.nupkg -k oy2dzacin3ajjbsj7kha446mq57mgbre3ejajvgdep2uau -s https://api.nuget.org/v3/index.json
