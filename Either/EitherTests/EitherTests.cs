@@ -11,8 +11,6 @@ namespace EitherTests
     public class EitherTests
     {
         private Either<string, int> _either;
-        private string left;
-        private int right;
 
         [TestInitialize]
         public void Setup()
