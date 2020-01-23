@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Either.Rule
@@ -33,14 +34,23 @@ namespace Either.Rule
             }
         }
 
-        public void AddRule(Rule<TLeft> rule) => AddRule(rule, _rulesForLeft);
-        public void AddRule(Rule<TRight> rule) => AddRule(rule, _rulesForRight);
+        public IRuleValidator<TLeft, TRight> AddRule(string ruleName, Func<TLeft, bool> rule)
+        {
+            AddRule(ruleName, rule, _rulesForLeft);
+            return this;
+        }
+
+        public IRuleValidator<TLeft, TRight> AddRule(string ruleName, Func<TRight, bool> rule)
+        {
+            AddRule(ruleName, rule, _rulesForRight);
+            return this;
+        }
 
         public void Replace(string ruleName, Func<TLeft, bool> replacement) => _rulesForLeft[ruleName] = (replacement, false);
         public void Replace(string ruleName, Func<TRight, bool> replacement) => _rulesForRight[ruleName] = (replacement, false);
 
-        public bool ValidateRuleFor(TRight value) => ValidateRuleFor(value, _rulesForRight);
         public bool ValidateRuleFor(TLeft value) => ValidateRuleFor(value, _rulesForLeft);
+        public bool ValidateRuleFor(TRight value) => ValidateRuleFor(value, _rulesForRight);
 
         public void ResetRulesForLeft() => _rulesForLeft.Clear();
         public void ResetRulesForRight() => _rulesForRight.Clear();
@@ -85,11 +95,8 @@ namespace Either.Rule
 
         // Private Methods
 
-        private void AddRule<T>(Rule<T> rule, IDictionary<string, (Func<T, bool>, bool)> ruleContainer) 
+        private void AddRule<T>(string ruleName, Func<T, bool> rule, IDictionary<string, (Func<T, bool>, bool)> ruleContainer) 
         {
-            var ruleName = rule.RuleName;
-            var ruleExpression = rule.TypeRule;
-
             if(string.IsNullOrWhiteSpace(ruleName))
             {
                 throw new ArgumentException("Rule must have a name");
@@ -102,7 +109,7 @@ namespace Either.Rule
 
             RuleCount++;
 
-            ruleContainer.Add(ruleName, (ruleExpression, false) );
+            ruleContainer.Add(ruleName, (rule, false) );
         }
 
         private bool ValidateRuleFor<T>(T value, IDictionary<string, (Func<T, bool>, bool)> ruleContainer)
@@ -117,9 +124,9 @@ namespace Either.Rule
                 return true;
             }
 
-            foreach(var ruleName in ruleContainer.Keys)
+            for(int index = 0; index < ruleContainer.Count; ++index)
             {
-
+                var ruleName = ruleContainer.Keys.ElementAt(index);
                 var rule = ruleContainer[ruleName].Item1;
 
                 if (TerminateOnFail && !rule.Invoke(value))
@@ -138,12 +145,7 @@ namespace Either.Rule
                 ruleContainer[ruleName] = (ruleContainer[ruleName].Item1, true);
             }
 
-            if(!TerminateOnFail && FailedValidationMessages.Count > 0)
-            {
-                return false;
-            }
-
-            return true;
+            return !TerminateOnFail && FailedValidationMessages.Count > 0 || true;
         }
     }
 }
