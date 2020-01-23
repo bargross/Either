@@ -1,5 +1,4 @@
 using System;
-using System.Linq.Expressions;
 
 namespace Either.Rule
 {
@@ -10,8 +9,8 @@ namespace Either.Rule
         int FailedCount { get; }
         int RuleCount { get; }
 
-        void AddRule(Rule<TRight> rule);
-        void AddRule(Rule<TLeft> rule);
+        IRuleValidator<TLeft, TRight> AddRule(string ruleName, Func<TLeft, bool> rule);
+        IRuleValidator<TLeft, TRight> AddRule(string ruleName, Func<TRight, bool> rule);
         bool ValidateRuleFor(TLeft left);
         bool ValidateRuleFor(TRight right);
         void ResetRulesForLeft();
