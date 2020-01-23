@@ -55,6 +55,8 @@ namespace Either.Rule
         public void ResetRulesForLeft() => _rulesForLeft.Clear();
         public void ResetRulesForRight() => _rulesForRight.Clear();
 
+        public bool ContainsRule(string ruleName) => _rulesForLeft.ContainsKey(ruleName) || _rulesForRight.ContainsKey(ruleName);
+
         public bool GetRuleValidationResult(string ruleName)
         {
             if(_rulesForLeft.ContainsKey(ruleName))

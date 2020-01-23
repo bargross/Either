@@ -118,6 +118,8 @@ namespace Either
                   : false;
         }
 
+        public bool ContainsRule(string ruleName) => _ruleValidator.ContainsRule(ruleName);
+        
         // IDisposable implementation
 
         public void Dispose()
