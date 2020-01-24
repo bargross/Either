@@ -42,17 +42,17 @@ namespace Either.Root
 
         public RootEither(TLeft left)
         {
-            this._left = left;
-            _right = default(TRight);
+            _left = left;
+            _right = default;
 
             IsLeftPresent = true;
             IsRightPresent = false;
         }
 
-        public RootEither(TRight right) 
+        public RootEither(TRight right)
         {
-            this._right = right;
-            _left = default(TLeft);
+            _right = right;
+            _left = default;
 
             IsLeftPresent = false;
             IsRightPresent = true;

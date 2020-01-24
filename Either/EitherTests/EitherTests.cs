@@ -163,6 +163,32 @@ namespace EitherTests
         }
 
         [TestMethod]
+        public void ImplicitOperatorTLeft_ValidLeftValueProvided_CastsEitherToTLeft()
+        {
+            var expected = "bla";
+            _either = expected;
+
+            var result = (string)_either;
+
+            Assert.IsTrue(_either.IsPresent);
+            Assert.IsTrue(_either.IsValid);
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void ImplicitOperatorTRight_ValidRightValueProvided_CastsEitherToTRight()
+        {
+            var expected = 123123;
+            _either = expected;
+
+            var result = (int)_either;
+
+            Assert.IsTrue(_either.IsPresent);
+            Assert.IsTrue(_either.IsValid);
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
         public void ReplaceRule_NewRuleGivenToReplaceOldRule_ReplacesRuleForRight()
         {
             var ruleName = "C";

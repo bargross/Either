@@ -11,6 +11,10 @@ namespace Either.Rule
 
         IRuleValidator<TLeft, TRight> AddRule(string ruleName, Func<TLeft, bool> rule);
         IRuleValidator<TLeft, TRight> AddRule(string ruleName, Func<TRight, bool> rule);
+
+        IRuleValidator<TLeft, TRight> Replace(string ruleName, Func<TLeft, bool> replacement);
+        IRuleValidator<TLeft, TRight> Replace(string ruleName, Func<TRight, bool> replacement);
+
         bool ValidateRuleFor(TLeft left);
         bool ValidateRuleFor(TRight right);
         void ResetRulesForLeft();
