@@ -21,19 +21,6 @@ namespace Either.Rule
         public RuleValidator() => Init();
         ~RuleValidator() => Dispose(false);
         
-        private void Init()
-        {
-            if(!_initialized)
-            {
-                _rulesForLeft = new Dictionary<string, (Func<TLeft, bool>, bool)>(_capacity);
-                _rulesForRight = new Dictionary<string, (Func<TRight, bool>, bool)>(_capacity);
-                FailedValidationMessages = new List<string>(_capacity) as IList<string>;
-                TerminateOnFail = false;
-
-                _initialized = true;
-            }
-        }
-
         public IRuleValidator<TLeft, TRight> AddRule(string ruleName, Func<TLeft, bool> rule)
         {
             AddRule(ruleName, rule, _rulesForLeft);
@@ -46,8 +33,16 @@ namespace Either.Rule
             return this;
         }
 
-        public void Replace(string ruleName, Func<TLeft, bool> replacement) => _rulesForLeft[ruleName] = (replacement, false);
-        public void Replace(string ruleName, Func<TRight, bool> replacement) => _rulesForRight[ruleName] = (replacement, false);
+        public IRuleValidator<TLeft, TRight> Replace(string ruleName, Func<TLeft, bool> replacement)
+        {
+            _rulesForLeft[ruleName] = (replacement, false);
+            return this;
+        }
+        public IRuleValidator<TLeft, TRight> Replace(string ruleName, Func<TRight, bool> replacement)
+        {
+            _rulesForRight[ruleName] = (replacement, false);
+            return this;
+        }
 
         public bool ValidateRuleFor(TLeft value) => ValidateRuleFor(value, _rulesForLeft);
         public bool ValidateRuleFor(TRight value) => ValidateRuleFor(value, _rulesForRight);
@@ -72,41 +67,26 @@ namespace Either.Rule
             throw new KeyNotFoundException("Rule not found");
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+        // Private Methods
 
-        protected virtual void Dispose(bool disposing)
+        private void Init()
         {
-            if(!_disposed)
+            if (!_initialized)
             {
-                if (disposing) 
-                {
-                    // managed resources
+                _rulesForLeft = new Dictionary<string, (Func<TLeft, bool>, bool)>(_capacity);
+                _rulesForRight = new Dictionary<string, (Func<TRight, bool>, bool)>(_capacity);
+                FailedValidationMessages = new List<string>(_capacity) as IList<string>;
+                TerminateOnFail = false;
 
-                    _rulesForLeft = null;
-                    _rulesForRight = null;
-                    FailedValidationMessages = null;
-                }
-
-                _disposed = true;
+                _initialized = true;
             }
         }
-
-        // Private Methods
 
         private void AddRule<T>(string ruleName, Func<T, bool> rule, IDictionary<string, (Func<T, bool>, bool)> ruleContainer) 
         {
             if(string.IsNullOrWhiteSpace(ruleName))
             {
                 throw new ArgumentException("Rule must have a name");
-            }
-
-            if(rule == null)
-            {
-                throw new NullReferenceException("Rule cannot be null");
             }
 
             RuleCount++;
@@ -148,6 +128,31 @@ namespace Either.Rule
             }
 
             return !TerminateOnFail && FailedValidationMessages.Count > 0 || true;
+        }
+
+        // GC
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    // managed resources
+
+                    _rulesForLeft = null;
+                    _rulesForRight = null;
+                    FailedValidationMessages = null;
+                }
+
+                _disposed = true;
+            }
         }
     }
 }
