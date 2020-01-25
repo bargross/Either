@@ -28,4 +28,4 @@ jobs:
         
     - name: publish-library
       run: |
-        dotnet nuget push Either/Either/bin/Debug/ControlFlow.Type.Either.1.0.0.nupkg -k oy2it4gac2yrr5z76cxa577f4vctf3lubkkrphvsad47zy -s https://api.nuget.org/v3/index.json
+        dotnet nuget push Either/Either/bin/Debug/ControlFlow.Type.Either.1.0.0.nupkg -k oy2ipy4bowcri2zrzbkq7zk4c3zo7ome3ozaexbkowyyey -s https://api.nuget.org/v3/index.json
