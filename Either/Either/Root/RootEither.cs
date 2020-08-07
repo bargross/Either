@@ -88,8 +88,8 @@ namespace Either.Root
                 {
                     // managed resources
 
-                    _left = default(TLeft);
-                    _right =  default(TRight);
+                    _left = default;
+                    _right =  default;
                 }
 
                 _disposed = true;

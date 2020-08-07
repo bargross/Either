@@ -1,4 +1,5 @@
 ﻿using System;
+using Either.Model;
 using Either.Rule;
 
 namespace Either
@@ -10,10 +11,12 @@ namespace Either
         T GetValue<T>();
         bool IsLeftValid();
         bool IsRightValid();
-        void ResetRulesForLeft();
-        void ResetRulesForRight();
-        void ResetRules();
-        bool GetValidationResultForRule(string ruleName);
-        void SetValidatorOptions(Action<IRuleValidator<TLeft, TRight>> validator);
+        void ResetLeftRulesToDefault();
+        void ResetRightRulesToDefault();
+        void ResetAllResultsToDefault();
+        void RemoveLeftRules();
+        void RemoveRightRules();
+        void RemoveAllRules();
+        bool GetValidationResultFor(string ruleName);
     }
 }

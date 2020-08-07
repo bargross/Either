@@ -19,18 +19,18 @@ namespace EitherTests
         }
 
         [TestMethod]
-        public void SetValidatorOptions_RuleNameNotProvidedForLeft_ThrowsArgumentExcption()
+        public void SetValidationRules_RuleNameNotProvidedForLeft_ThrowsArgumentExcption()
         {
             Assert.ThrowsException<ArgumentException>(() => {
-                _either.SetValidatorOptions(options => options.AddRule(null, value => !string.IsNullOrWhiteSpace(value)) );
+                _either.SetValidationRules(options => options.AddRule(null, value => !string.IsNullOrWhiteSpace(value)) );
             });
         }
 
         [TestMethod]
-        public void SetValidatorOptions_RuleNameNotProvidedForRight_ThrowsArgumentExcption()
+        public void SetValidationRules_RuleNameNotProvidedForRight_ThrowsArgumentExcption()
         {
             Assert.ThrowsException<ArgumentException>(() => {
-                _either.SetValidatorOptions(options => options.AddRule(null, value => value > 0 && value < 10));
+                _either.SetValidationRules(options => options.AddRule(null, value => value > 0 && value < 10));
             });
         }
 
@@ -41,7 +41,7 @@ namespace EitherTests
         public void ContainsRule_RuleNameProvided_ReturnsTrue()
         {
             var ruleName = "A";
-            _either.SetValidatorOptions( options => options.AddRule(ruleName, value => value == ruleName));
+            _either.SetValidationRules( options => options.AddRule(ruleName, value => value == ruleName));
 
             var result = _either.ContainsRule(ruleName);
 
@@ -49,11 +49,11 @@ namespace EitherTests
         }
         
         [TestMethod]
-        public void SetValidatorOptions_RuleProvidedForLeft_ValidatorContainsRule()
+        public void SetValidationRules_RuleProvidedForLeft_ValidatorContainsRule()
         {
             var ruleName = "B";
 
-            _either.SetValidatorOptions( options => {
+            _either.SetValidationRules( options => {
                 options.AddRule(ruleName, value => !string.IsNullOrWhiteSpace(value));
             });
 
@@ -61,11 +61,11 @@ namespace EitherTests
         }
 
         [TestMethod]
-        public void SetValidatorOptions_RuleProvidedForRight_ValidatorContainsRule()
+        public void SetValidationRules_RuleProvidedForRight_ValidatorContainsRule()
         {
             var ruleName = "B";
 
-            _either.SetValidatorOptions(options => {
+            _either.SetValidationRules(options => {
                 options.AddRule(ruleName, value => value > 0 && value < 10);
             });
 
@@ -94,7 +94,7 @@ namespace EitherTests
             var invalidValue = " ";
             var ruleName = "A";
 
-            _either.SetValidatorOptions(options => {
+            _either.SetValidationRules(options => {
                 options.TerminateOnFail = true;
                 options.AddRule(ruleName, value => !string.IsNullOrWhiteSpace(value));
             });
@@ -112,7 +112,7 @@ namespace EitherTests
             var invalidValue = 11;
             var ruleName = "A";
 
-            _either.SetValidatorOptions(options => {
+            _either.SetValidationRules(options => {
                 options.TerminateOnFail = true;
                 options.AddRule(ruleName, value => value >= 0 && value <= 10);
             });
@@ -130,7 +130,7 @@ namespace EitherTests
             var expected = "Valid String";
             var ruleName = "A";
 
-            _either.SetValidatorOptions(options => {
+            _either.SetValidationRules(options => {
                 options.TerminateOnFail = true;
                 options.AddRule(ruleName, value => !string.IsNullOrWhiteSpace(value));
             });
@@ -149,7 +149,7 @@ namespace EitherTests
             var expected = 10;
             var ruleName = "A";
 
-            _either.SetValidatorOptions(options => {
+            _either.SetValidationRules(options => {
                 options.TerminateOnFail = true;
                 options.AddRule(ruleName, value => value >= 0 && value <= 10);
             });
@@ -193,7 +193,7 @@ namespace EitherTests
         {
             var ruleName = "C";
 
-            _either.SetValidatorOptions(options => options.AddRule(ruleName, value => value == ruleName));
+            _either.SetValidationRules(options => options.AddRule(ruleName, value => value == ruleName));
 
             _either.ReplaceRule(ruleName, value => value == 1);
             _either = 1;
@@ -207,7 +207,7 @@ namespace EitherTests
         {
             var ruleName = "C";
 
-            _either.SetValidatorOptions(options => options.AddRule(ruleName, value => value == 1));
+            _either.SetValidationRules(options => options.AddRule(ruleName, value => value == 1));
 
             _either.ReplaceRule(ruleName, value => value == ruleName);
             _either = ruleName;
@@ -222,7 +222,7 @@ namespace EitherTests
             var ruleNameLeft = "A";
             var ruleNameRight = "B";
 
-            _either.SetValidatorOptions(options => {
+            _either.SetValidationRules(options => {
                 options.AddRule(ruleNameLeft, value => value == ruleNameRight)
                 .AddRule(ruleNameRight, value => value > 1);
             });
