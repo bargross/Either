@@ -3,8 +3,12 @@
     <metadata minClientVersion="1.0.1">
         <id>ControlFlow.Type.Either</id>
         <version>1.0.0</version>
+        <license type="file">LICENSE.txt</license>
         <title>Control Flow Functional Type: Either</title>
         <authors>Leo M.</authors>
-        <description></description> 
+        <description>A control flow data type useful for those specific situations where different data types can determine the flow to be taken</description> 
     </metadata>
+    <files>
+        <file src="./LICENSE.txt"/>
+    </files>
 </package>
