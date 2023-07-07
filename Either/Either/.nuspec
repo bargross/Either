@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package>
-    <metadata minClientVersion="1.0.0">
+    <metadata minClientVersion="1.0.1">
         <id>ControlFlow.Type.Either</id>
         <version>1.0.0</version>
         <title>Control Flow Functional Type: Either</title>
