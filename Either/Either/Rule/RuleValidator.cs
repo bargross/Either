@@ -19,6 +19,8 @@ namespace Either.Rule
         public int RuleCount { get; private set; }
 
         public RuleValidator() => Init();
+        
+        // dispose destructor
         ~RuleValidator() => Dispose(false);
         
         public IRuleValidator<TLeft, TRight> AddRule(string ruleName, Func<TLeft, bool> rule)
@@ -47,21 +49,21 @@ namespace Either.Rule
         public bool ValidateRuleFor(TLeft value) => ValidateRuleFor(value, _rulesForLeft);
         public bool ValidateRuleFor(TRight value) => ValidateRuleFor(value, _rulesForRight);
 
-        public void ResetRulesForLeft() => _rulesForLeft.Clear();
-        public void ResetRulesForRight() => _rulesForRight.Clear();
+        public void ResetRulesForLeftValue() => _rulesForLeft.Clear();
+        public void ResetRulesForRightValue() => _rulesForRight.Clear();
 
         public bool ContainsRule(string ruleName) => _rulesForLeft.ContainsKey(ruleName) || _rulesForRight.ContainsKey(ruleName);
 
         public bool GetRuleValidationResult(string ruleName)
         {
-            if(_rulesForLeft.ContainsKey(ruleName))
+            if (_rulesForLeft.TryGetValue(ruleName, out var leftRuleDetails))
             {
-                return _rulesForLeft[ruleName].Item2;
+                return leftRuleDetails.Item2;
             }
 
-            if(_rulesForRight.ContainsKey(ruleName))
+            if (_rulesForRight.TryGetValue(ruleName, out var rightRuleDetails))
             {
-                return _rulesForRight[ruleName].Item2;
+                return rightRuleDetails.Item2;
             }
 
             throw new KeyNotFoundException("Rule not found");
@@ -75,7 +77,7 @@ namespace Either.Rule
             {
                 _rulesForLeft = new Dictionary<string, (Func<TLeft, bool>, bool)>(_capacity);
                 _rulesForRight = new Dictionary<string, (Func<TRight, bool>, bool)>(_capacity);
-                FailedValidationMessages = new List<string>(_capacity) as IList<string>;
+                FailedValidationMessages = new List<string>(_capacity);
                 TerminateOnFail = false;
 
                 _initialized = true;

@@ -4,8 +4,8 @@ namespace Either.Root
 {
     internal class RootEither<TLeft, TRight> : IRootEither<TLeft, TRight>, IDisposable
     {
-        public bool IsLeftPresent { get; }
-        public bool IsRightPresent { get; }
+        public bool LeftPresent { get; }
+        public bool RightPresent { get; }
 
         private TLeft _left;
         private TRight _right;
@@ -15,7 +15,7 @@ namespace Either.Root
         {
             get
             {
-                if (IsLeftPresent && !IsRightPresent)
+                if (LeftPresent && !RightPresent)
                 {
                     return _left;
                 }
@@ -28,7 +28,7 @@ namespace Either.Root
         {
             get
             {
-                if (IsRightPresent && !IsLeftPresent)
+                if (RightPresent && !LeftPresent)
                 {
                     return _right;
                 }
@@ -45,8 +45,8 @@ namespace Either.Root
             _left = left;
             _right = default;
 
-            IsLeftPresent = true;
-            IsRightPresent = false;
+            LeftPresent = true;
+            RightPresent = false;
         }
 
         public RootEither(TRight right)
@@ -54,8 +54,8 @@ namespace Either.Root
             _right = right;
             _left = default;
 
-            IsLeftPresent = false;
-            IsRightPresent = true;
+            LeftPresent = false;
+            RightPresent = true;
         }
 
         ~RootEither() => Dispose(false);

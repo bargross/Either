@@ -13,40 +13,53 @@ namespace Either
 
         private Type _currentType;
         private bool _isLeft;
-        private bool _disposed = false;
+        private bool _disposed;
 
         public bool IsValid { get; private set; }
         public bool IsPresent { get; private set;  }
+
+        public bool IsLeftValid
+        {
+            get
+            {
+                return _ruleValidator.ValidateRuleFor(_root.Left);
+            }
+        }
+
+        public bool IsRightValid
+        {
+            get
+            {
+                return _ruleValidator.ValidateRuleFor(_root.Right);
+            }
+        }
 
         public Either() => _ruleValidator = new RuleValidator<TLeft, TRight>();
 
         private Either(TLeft left, RuleValidator<TLeft, TRight> validator)
         {
             _root = left;
-
-            AssignScopeValues(
-                _ruleValidator == null ? new RuleValidator<TLeft, TRight>() : validator,
-                typeof(TLeft),
-                true,
-                true,
-                IsLeftValid()
-            );
+            
+            SetValidator(validator);
+            
+            AssignScopeValues(typeof(TLeft),true, true, IsLeftValid);
         }
 
         private Either(TRight right, RuleValidator<TLeft, TRight> validator)
         {
             _root = right;
+            
+            SetValidator(validator);
 
-            AssignScopeValues(
-                _ruleValidator == null ? new RuleValidator<TLeft, TRight>() : validator,
-                typeof(TRight),
-                false,
-                true,
-                IsRightValid()
-            );
+            AssignScopeValues(typeof(TRight),false,true, IsRightValid);
         }
 
         ~Either() => Dispose(false);
+
+        private void SetValidator(RuleValidator<TLeft, TRight> validator = null)
+        {
+            _ruleValidator = _ruleValidator == null ? new RuleValidator<TLeft, TRight>() : validator;
+        }
 
         public void ReplaceRule(string ruleName, Func<TLeft, bool> replacement)
         {
@@ -67,9 +80,6 @@ namespace Either
             
             _ruleValidator.Replace(ruleName, replacement);
         }
-
-        public bool IsLeftValid() => _ruleValidator.ValidateRuleFor(_root.Left);
-        public bool IsRightValid() => _ruleValidator.ValidateRuleFor(_root.Right);
 
         public T GetValue<T>()
         {
@@ -93,13 +103,13 @@ namespace Either
             throw new InvalidCastException($"Either {typeof(TLeft)} nor {typeof(TRight)} match type: {typeof(T)}");
         }
 
-        public void ResetRulesForLeft() => _ruleValidator.ResetRulesForLeft();
-        public void ResetRulesForRight() => _ruleValidator.ResetRulesForRight();
+        public void ResetRulesForLeftValue() => _ruleValidator.ResetRulesForLeftValue();
+        public void ResetRulesForRightValue() => _ruleValidator.ResetRulesForRightValue();
 
         public void ResetRules()
         {
-            ResetRulesForLeft();
-            ResetRulesForRight();
+            ResetRulesForLeftValue();
+            ResetRulesForRightValue();
         }
 
         public bool GetValidationResultForRule(string ruleName) => _ruleValidator.GetRuleValidationResult(ruleName);
@@ -113,12 +123,38 @@ namespace Either
 
             setOptions.Invoke(_ruleValidator);
 
-            IsValid = IsPresent ? 
-                _isLeft ? IsLeftValid() : IsRightValid()
-                  : false;
+            if (IsPresent)
+            {
+                IsValid = _isLeft ? IsLeftValid : IsRightValid;
+            }
+            else
+            {
+                IsValid = false;
+            }
         }
 
         public bool ContainsRule(string ruleName) => _ruleValidator.ContainsRule(ruleName);
+        
+        public static Either<TLeft, TRight> Of(TLeft value) => new Either<TLeft, TRight>(value, _ruleValidator);
+        public static Either<TLeft, TRight> Of(TRight value) => new Either<TLeft, TRight>(value, _ruleValidator);
+        
+        // private methods
+
+        private void AssignScopeValues(Type type, bool isLeft, bool isPresent, bool isValid)
+        {
+            _currentType = type;
+            _isLeft = isLeft;
+            IsPresent = isPresent;
+            IsValid = isValid;
+        }
+        
+        // Assignment & Cast Operators
+
+        public static implicit operator Either<TLeft, TRight>(TRight right) => new Either<TLeft, TRight>(right, _ruleValidator);
+        public static implicit operator Either<TLeft, TRight>(TLeft left) => new Either<TLeft, TRight>(left, _ruleValidator);
+
+        public static explicit operator TLeft(Either<TLeft, TRight> either) => either.GetValue<TLeft>();
+        public static explicit operator TRight(Either<TLeft, TRight> either) => either.GetValue<TRight>();
         
         // IDisposable implementation
 
@@ -140,28 +176,6 @@ namespace Either
                 _disposed = true;
             }
         }
-
-        public static Either<TLeft, TRight> Of(TLeft value) => new Either<TLeft, TRight>(value, _ruleValidator);
-        public static Either<TLeft, TRight> Of(TRight value) => new Either<TLeft, TRight>(value, _ruleValidator);
-
-        // private methods
-
-        private void AssignScopeValues(RuleValidator<TLeft, TRight> validator, Type type, bool isLeft, bool isPresent, bool isValid)
-        {
-            _ruleValidator = validator;
-            _currentType = type;
-            _isLeft = isLeft;
-            IsPresent = isPresent;
-            IsValid = isValid;
-        }
-
-        // Assignment & Cast Operators
-
-        public static implicit operator Either<TLeft, TRight>(TRight right) => new Either<TLeft, TRight>(right, _ruleValidator);
-        public static implicit operator Either<TLeft, TRight>(TLeft left) => new Either<TLeft, TRight>(left, _ruleValidator);
-
-        public static explicit operator TLeft(Either<TLeft, TRight> either) => either.GetValue<TLeft>();
-        public static explicit operator TRight(Either<TLeft, TRight> either) => either.GetValue<TRight>();
     }
 
 }

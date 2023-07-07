@@ -17,8 +17,8 @@ namespace Either.Rule
 
         bool ValidateRuleFor(TLeft left);
         bool ValidateRuleFor(TRight right);
-        void ResetRulesForLeft();
-        void ResetRulesForRight();
+        void ResetRulesForLeftValue();
+        void ResetRulesForRightValue();
         bool GetRuleValidationResult(string ruleName);
     }
 }
